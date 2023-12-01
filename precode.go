@@ -63,13 +63,12 @@ func getTaskByID(w http.ResponseWriter, r *http.Request) {
 
 func createTask(w http.ResponseWriter, r *http.Request) {
 	var task Task
+	defer r.Body.Close()
 
 	if err := json.NewDecoder(r.Body).Decode(&task); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	r.Body.Close()
 
 	tasks[task.ID] = task
 	w.WriteHeader(http.StatusCreated)
